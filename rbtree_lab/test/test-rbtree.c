@@ -12,6 +12,7 @@ void test_init(void)
 #ifdef SENTINEL
   assert(t->nil != NULL);
   assert(t->root == t->nil);
+  
 #else
   assert(t->root == NULL);
 #endif
