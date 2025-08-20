@@ -25,41 +25,27 @@ rbtree *new_rbtree(void)
 }
 
 // 후위순회 돌면서 free?
-void delete_rbtree(rbtree *t)
-{
-  if (!t)
-    return;
+void delete_rbtree(rbtree *t) {
+  if (!t || t->root == t->nil) return;
   node_t *cur = t->root;
   node_t *parent;
 
-  while (cur != t->nil)
-  {
-    if (cur->left != t->nil)
-    {
-      cur = cur->left;
-    }
-    else if (cur->right != t->nil)
-    {
-      cur = cur->right;
-    }
-    else if (cur->parent == t->nil)
-    {
+  while (cur != t->nil){
+    if (cur->left != t->nil) cur = cur->left;
+    else if (cur->right != t->nil) cur = cur->right;
+    else if (cur->parent == t->nil){
       free(cur);
       t->root = t->nil;
       break;
     }
-    else
-    {
+    else{
       parent = cur->parent;
-      if (parent->left == cur)
-        parent->left = t->nil;
-      else
-        parent->right = t->nil;
+      if (parent->left == cur) parent->left = t->nil;
+      else parent->right = t->nil;
       free(cur);
       cur = parent;
     }
   }
-
   free(t->nil);
   free(t);
   return;
@@ -501,12 +487,12 @@ static void preorder(const rbtree *t, const node_t *node, key_t *arr, size_t n, 
 {
   if (node == t->nil || *idx >= n)
     return;
-
+  
+  preorder(t, node->left, arr, n, idx);
   if (*idx < n)
   {
     arr[(*idx)++] = node->key;
   }
-  preorder(t, node->left, arr, n, idx);
   preorder(t, node->right, arr, n, idx);
 }
 
